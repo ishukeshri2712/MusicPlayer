@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
+</head>
+<body>
+    <div class="container">
+        <h4>Music Player</h4>
+        <img id="track_image">
+        <p id="title">title.mp3</p>
+        <marquee id="Artist">Artist name</marquee>
+        <input type="range" id="d_s" min="0" max="100" value="0" onclick="change_duration()">
+        <button onclick="previous()" id="pre"><i class="fa fa-step-backward"></i></button>
+        <button onclick="justplay()" id="play"><i class="fa fa-play"></i></button>
+        <button onclick="nextplay()" id="next"><i class="fa fa-forward"></i></button>
+        <script>
+            let pre= document.querySelector('#pre');        
+            let play= document.querySelector('#play');            
+            let next= document.querySelector('#next');
+            let title= document.querySelector('#title');
+            let Artist=document.querySelector('#Artist');
+            let slider =document.querySelector('#d_s');
+            let track_image =document.querySelector('#track_image');
+            let timer;
+            let autoplay=1;
+            let index_no =0;
+            let playing_song =false;
+            let All_song=  [
+                {
+                    name : "Raataan Lambiyan",
+                    path : "songs/song1.mp3",
+                    img : "images/rt.jpg",
+                    artist : "ishu"
+                },
+                {
+                    name : "Ranjha",
+                    path: "songs/song2.mp3",
+                    img : "images/rs.jpg",
+                    artist: "satyam"
+                },
+                {
+                    name: "Mann Bharryaa 2.0",
+                    path: "songs/song3.mp3",                   
+                    img : "images/mb.jpg",
+                    artist: "amrit" 
+                 }];
+
+            let track =document.createElement('audio')
+             function load_track(index_no){
+             clearInterval(timer);
+             reset_slider();
+             track.src= All_song[index_no].path;
+             title.innerHTML =All_song[index_no].name;
+             track_image.src =All_song[index_no].img;
+             Artist.innerHTML= All_song[index_no].artist;
+             timer= setInterval(range_slider,1000);
+             total.innerHTML =All_song.length
+             present.innerHTML= index_no+1;
+               }
+            load_track(index_no);
+            function justplay(){
+                if(playing_song==false){
+                    playsong();
+                }
+                else{
+                    pausesong();
+                }
+            }
+
+         function reset_slider(){
+             slider.value =0;
+         }
+         function playsong(){
+             track.play();
+             playing_song =true;
+             play.innerHTML ='<i class="fa fa-pause"></i>'
+         }
+         function pausesong(){
+             track.pause();
+             playing_song = false;
+             play.innerHTML ='<i class= "fa fa-play"></i>'
+         }
+         function nextplay(){
+             if(index_no<All_song.length-1){
+                 index_no += 1;
+                 load_track(index_no);
+                 playsong();
+             }
+             else {
+                 index_no=0;
+                 load_track(index_no);
+                 playsong();
+                  }
+            }        
+        function nextplay(){
+            if(index_no>0){
+                index_no -= 1;
+                load_track(index_no);
+                playsong();
+            }            
+             else {
+                  index_no=All_song.length;                
+                  load_track(index_no);                
+                  playsong();
+             }
+             }
+             function change_duration(){
+                 slider_position =track.duration*(slider.value/100);
+                 track.currentTime= slider_position;
+             }
+             
+      </script>
+    </div>
+</body>
+</html>
